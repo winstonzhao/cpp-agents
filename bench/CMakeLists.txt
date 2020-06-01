@@ -4,14 +4,14 @@ add_subdirectory(benchmark)
 include_directories(benchmark/include)
 
 set(bench_cc
-  primes_bench.cc
+  test_bench.cc
 )
 
-add_executable(bench_nemo ${bench_cc})
+add_executable(bench_agents ${bench_cc})
 
-target_link_libraries(bench_nemo
+target_link_libraries(bench_agents
   benchmark
-  ${NEMO_LIB_NAME}
+  ${AGENTS_LIB_NAME}
   ${CMAKE_THREAD_LIBS_INIT}
   ${MATH_LIBS}
 )
