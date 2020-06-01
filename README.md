@@ -5,13 +5,15 @@ TF Agents already exists and seems like a really easy and cool way to do RL: htt
 
 # RoadMap
 ## Make Interfaces for Major Components
-- [ ] Environment
-- [ ] Agent
-- [ ] Policy
-- [ ] Trajectory
-- [ ] Replay Buffer
+- [X] Environment
+- [X] Agent
+- [X] Policy
+- [X] Trajectory
 
 ## Simple Training Example (Tic-Tac-Toe)
+- [ ] TTT-Environment
+- [ ] Simple Table Lookup Sarsa-lambda Agent
+- [ ] Greedy/Epsilon-greedy Policies
 - [ ] Policy Saving
 - [ ] Aesthetic Graphs
 - [ ] Not Slow
