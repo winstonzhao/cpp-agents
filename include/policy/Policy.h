@@ -11,6 +11,11 @@ namespace CppAgents::Policy
     class Policy
     {
     public:
+        using timestep_t = TimeStepType;
+        using action_t = ActionType;
+        using policystate_t = PolicyStateType;
+        using info_t = InfoType;
+
         struct PolicyStepType
         {
             ActionType action;

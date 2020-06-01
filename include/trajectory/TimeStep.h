@@ -15,6 +15,10 @@ namespace CppAgents::Trajectory
         typename DiscountType>
     struct TimeStepType
     {
+        using observation_t = ObservationType;
+        using reward_t = RewardType;
+        using discount_t = DiscountType;
+
         ObservationType observation;
         RewardType reward;
         DiscountType discount;

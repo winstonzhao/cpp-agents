@@ -2,7 +2,7 @@
 
 #include "trajectory/TimeStep.h"
 
-namespace CppAgents::Environments
+namespace CppAgents::Environment
 {
     template <
         typename ObservationType,
@@ -14,17 +14,23 @@ namespace CppAgents::Environments
     class Environment
     {
     public:
-        using TimeStepType = Trajectory::TimeStepType<ObservationType, RewardType, DiscountType>;
+        using timestep_t = Trajectory::TimeStepType<ObservationType, RewardType, DiscountType>;
+        using observation_t = ObservationType;
+        using action_t = ActionType;
+        using reward_t = RewardType;
+        using state_t = StateType;
+        using discount_t = DiscountType;
+        using seed_t = SeedType;
 
     public:
-        virtual TimeStepType GetCurrentTimeStep();
-        virtual TimeStepType Reset();
-        virtual TimeStepType Step(ActionType action);
+        virtual timestep_t GetCurrentTimeStep();
+        virtual timestep_t Reset();
+        virtual timestep_t Step(ActionType action);
         virtual void Close();
         virtual void Render();
         virtual void Seed(SeedType seed);
-        virtual TimeStepType GetInfo();
+        virtual timestep_t GetInfo();
         virtual StateType GetState();
         virtual void SetState(StateType state);
     };
-}; // namespace CppAgents::Environments
+}; // namespace CppAgents::Environment
