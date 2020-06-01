@@ -14,6 +14,7 @@ TF Agents already exists and seems like a really easy and cool way to do RL: htt
 - [ ] TTT-Environment
 - [ ] Simple Table Lookup Sarsa-lambda Agent
 - [ ] Greedy/Epsilon-greedy Policies
+- [ ] Tests
 - [ ] Policy Saving
 - [ ] Aesthetic Graphs
 - [ ] Not Slow
