@@ -4,7 +4,7 @@ include_directories(./gtest/googletest/include)
 
 set(test_src
   run_all.cc
-  answer_test.cc
+  ttt_tests.cc
 )
 
 add_executable(test_agents ${test_src})

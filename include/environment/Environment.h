@@ -7,10 +7,10 @@ namespace CppAgents::Environment
     template <
         typename ObservationType,
         typename ActionType,
-        typename RewardType,
-        typename StateType,
-        typename DiscountType,
-        typename SeedType>
+        typename RewardType = int,
+        typename StateType = ObservationType,
+        typename DiscountType = int,
+        typename SeedType = int>
     class Environment
     {
     public:
@@ -25,12 +25,12 @@ namespace CppAgents::Environment
     public:
         virtual timestep_t GetCurrentTimeStep();
         virtual timestep_t Reset();
-        virtual timestep_t Step(ActionType action);
-        virtual void Close();
-        virtual void Render();
-        virtual void Seed(SeedType seed);
-        virtual timestep_t GetInfo();
-        virtual StateType GetState();
-        virtual void SetState(StateType state);
+        virtual timestep_t Step(action_t action);
+        virtual void Close() {}
+        virtual void Render() {}
+        virtual void Seed(seed_t seed) {}
+        virtual observation_t GetInfo();
+        virtual state_t GetState();
+        virtual void SetState(state_t state);
     };
 }; // namespace CppAgents::Environment

@@ -21,8 +21,8 @@ namespace CppAgents::Trajectory
 
         ObservationType observation;
         RewardType reward;
-        DiscountType discount;
         Trajectory::StepType stepType;
+        DiscountType discount;
     };
 
 } // namespace CppAgents::Trajectory
