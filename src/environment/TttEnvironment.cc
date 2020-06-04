@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <assert.h>
 
-namespace CppAgents::Environment
+namespace CppAgents::Environment::TttEnvironment
 {
     TttEnvironment::TttEnvironment()
     {
@@ -72,13 +72,10 @@ namespace CppAgents::Environment
         {
             auto oldBoard = mBoard;
             Reset();
-            mLastTimeStep = {oldBoard, goState, Trajectory::LAST};
-        }
-        else
-        {
-            mLastTimeStep = {mBoard, goState, Trajectory::MID};
+            return {oldBoard, goState, Trajectory::LAST};
         }
 
+        mLastTimeStep = {mBoard, goState, Trajectory::MID};
         return mLastTimeStep;
     }
 
@@ -109,11 +106,16 @@ namespace CppAgents::Environment
                 mNumCircle++;
             }
         }
+
+        if (IsGameOver())
+        {
+            Reset();
+        }
     }
 
     int TttEnvironment::IsGameOver()
     {
-        if (mNumCircle > LENGTH || mNumCross > LENGTH)
+        if (mNumCircle < LENGTH && mNumCross < LENGTH)
         {
             return 0;
         }
@@ -140,4 +142,4 @@ namespace CppAgents::Environment
 
         return 0;
     }
-} // namespace CppAgents::Environment
+} // namespace CppAgents::Environment::TttEnvironment

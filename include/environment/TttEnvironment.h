@@ -5,9 +5,10 @@
 #include <iostream>
 #include "environment/Environment.h"
 
-namespace CppAgents::Environment
+namespace CppAgents::Environment::TttEnvironment
 {
-    constexpr int LENGTH = 4;
+    // THIS IS HARD CODED FOR EASE OF TESTING!
+    constexpr int LENGTH = 3;
     constexpr int CROSS = 1;
     constexpr int CIRCLE = -1;
     constexpr int BLANK = 0;
@@ -33,4 +34,4 @@ namespace CppAgents::Environment
         int mNumCross = 0;
         int mNumCircle = 0;
     };
-} // namespace CppAgents::Environment
+} // namespace CppAgents::Environment::TttEnvironment
