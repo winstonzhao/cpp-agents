@@ -7,7 +7,9 @@
 
 namespace CppAgents::Environment::TttEnvironment
 {
-    // THIS IS HARD CODED FOR EASE OF TESTING!
+    // Main reason why this is hardcoded, is due to array usage,
+    // I do wonder what the speed difference would be with std::vector,
+    // I guess I can test that when the whole gym is complete for TTT
     constexpr int LENGTH = 3;
     constexpr int CROSS = 1;
     constexpr int CIRCLE = -1;

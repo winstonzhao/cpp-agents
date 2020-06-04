@@ -6,25 +6,27 @@ namespace CppAgents::Policy
         typename TimeStepType,
         typename ActionType,
         typename PolicyStateType,
-        typename InfoType,
-        typename ObservationAndActionConstraintSplitter>
+        typename InfoType>
     class Policy
     {
     public:
+        template <
+            typename TActionType, typename TPolicyStateType, typename TInfoType>
+        struct PolicyStepType
+        {
+            TActionType action;
+            TPolicyStateType state;
+            TInfoType info;
+        };
+
         using timestep_t = TimeStepType;
         using action_t = ActionType;
         using policystate_t = PolicyStateType;
         using info_t = InfoType;
-
-        struct PolicyStepType
-        {
-            ActionType action;
-            PolicyStateType state;
-            InfoType info;
-        };
+        using policystep_t = PolicyStepType<ActionType, PolicyStateType, InfoType>;
 
     public:
-        virtual PolicyStateType GetInitialState();
-        virtual PolicyStepType Action(TimeStepType ts, PolicyStateType ps);
+        virtual policystate_t GetInitialState();
+        virtual policystep_t Action(TimeStepType ts, PolicyStateType ps);
     };
 } // namespace CppAgents::Policy

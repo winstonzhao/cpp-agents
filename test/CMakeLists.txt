@@ -4,7 +4,8 @@ include_directories(./gtest/googletest/include)
 
 set(test_src
   run_all.cc
-  ttt_tests.cc
+  ttt_env_tests.cc
+  greedy_policy_tests.cc
 )
 
 add_executable(test_agents ${test_src})
