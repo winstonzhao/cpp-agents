@@ -11,7 +11,7 @@ TF Agents already exists and seems like a really easy and cool way to do RL: htt
 - [X] Trajectory
 
 ## Simple Training Example (Tic-Tac-Toe)
-- [ ] TTT-Environment
+- [X] TTT-Environment
 - [ ] Simple Table Lookup Sarsa-lambda Agent
 - [ ] Greedy/Epsilon-greedy Policies
 - [ ] Tests
