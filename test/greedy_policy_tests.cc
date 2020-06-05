@@ -2,7 +2,6 @@
 #include "gtest/gtest.h"
 #include "policy/GreedyPolicy.h"
 #include "trajectory/TimeStep.h"
-#include <array>
 
 namespace CppAgents::Policy::GreedyPolicy
 {
@@ -10,7 +9,7 @@ namespace CppAgents::Policy::GreedyPolicy
     TEST(GREEDY_POLICY, PICKS_HIGHEST_REWARD_SINGLE)
     {
         using ts_t = Trajectory::TimeStepType<int, int, int>;
-        GreedyPolicy<std::string, ts_t> x{[](ts_t) {
+        GreedyPolicy<std::string, ts_t> policy{[](ts_t) {
             std::multimap<int, std::string> actions;
             actions.insert({3, "best"});
             actions.insert({1, "worst"});
@@ -19,14 +18,14 @@ namespace CppAgents::Policy::GreedyPolicy
             return actions;
         }};
 
-        const auto res = x.Action({5, 5, Trajectory::FIRST});
+        const auto res = policy.Action({5, 5, Trajectory::FIRST});
         EXPECT_EQ(res.action, "best");
     }
 
     TEST(GREEDY_POLICY, PICKS_HIGHEST_REWARD_MULTIPLE)
     {
         using ts_t = Trajectory::TimeStepType<int, int, int>;
-        GreedyPolicy<std::string, ts_t> x{[](ts_t ts) {
+        GreedyPolicy<std::string, ts_t> policy{[](ts_t ts) {
             std::multimap<int, std::string> actions;
             actions.insert({1, "worst"});
             actions.insert({2, "middle"});
@@ -36,16 +35,16 @@ namespace CppAgents::Policy::GreedyPolicy
             return actions;
         }};
 
-        x.SetRandomProvider([](int, int) { return 0; });
-        auto res = x.Action({5, 5, Trajectory::FIRST});
+        policy.SetRandomProvider([](int, int) { return 0; });
+        auto res = policy.Action({5, 5, Trajectory::FIRST});
         EXPECT_EQ(res.action, "third");
 
-        x.SetRandomProvider([](int, int) { return 2; });
-        res = x.Action({5, 5, Trajectory::FIRST});
+        policy.SetRandomProvider([](int, int) { return 2; });
+        res = policy.Action({5, 5, Trajectory::FIRST});
         EXPECT_EQ(res.action, "first");
 
-        x.SetRandomProvider([](int, int) { return 1; });
-        res = x.Action({5, 5, Trajectory::FIRST});
+        policy.SetRandomProvider([](int, int) { return 1; });
+        res = policy.Action({5, 5, Trajectory::FIRST});
         EXPECT_EQ(res.action, "second");
     }
 

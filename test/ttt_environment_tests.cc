@@ -6,9 +6,11 @@
 namespace CppAgents::Environment::TttEnvironment
 {
 
+  constexpr int LENGTH = 3;
+
   TEST(TTT_ENVRIONMENT, CROSS_WIN_ROW)
   {
-    TttEnvironment ttt;
+    TttEnvironment<LENGTH> ttt;
     std::array<int, LENGTH *LENGTH> board = {
         CROSS, CROSS, BLANK,
         CIRCLE, CIRCLE, BLANK,
@@ -25,7 +27,7 @@ namespace CppAgents::Environment::TttEnvironment
 
   TEST(TTT_ENVRIONMENT, CROSS_WIN_COL)
   {
-    TttEnvironment ttt;
+    TttEnvironment<LENGTH> ttt;
     std::array<int, LENGTH * LENGTH> board{
         CROSS, CIRCLE, BLANK,
         CROSS, CIRCLE, BLANK,
@@ -42,7 +44,7 @@ namespace CppAgents::Environment::TttEnvironment
 
   TEST(TTT_ENVRIONMENT, CIRCLE_WIN_LRDIAG)
   {
-    TttEnvironment ttt;
+    TttEnvironment<LENGTH> ttt;
     std::array<int, LENGTH * LENGTH> board{
         CIRCLE, CROSS, CROSS,
         CROSS, CIRCLE, BLANK,
@@ -59,7 +61,7 @@ namespace CppAgents::Environment::TttEnvironment
 
   TEST(TTT_ENVRIONMENT, CIRCLE_WIN_RLDIAG)
   {
-    TttEnvironment ttt;
+    TttEnvironment<LENGTH> ttt;
     std::array<int, LENGTH * LENGTH> board{
         CROSS, BLANK, BLANK,
         CROSS, CIRCLE, BLANK,
@@ -76,7 +78,7 @@ namespace CppAgents::Environment::TttEnvironment
 
   TEST(TTT_ENVRIONMENT, RESET_AFTER_WIN)
   {
-    TttEnvironment ttt;
+    TttEnvironment<LENGTH> ttt;
     std::array<int, LENGTH * LENGTH> board{
         CROSS, BLANK, BLANK,
         CROSS, CIRCLE, BLANK,

@@ -1,7 +1,6 @@
 # Source files (except the main for the executable):
 set(agents_src
   main.cc
-  environment/TttEnvironment.cc
 )
 
 # Compile the library

@@ -25,8 +25,7 @@ namespace CppAgents::Policy::GreedyPolicy
         using action_t = typename parent::action_t;
         using info_t = typename parent::info_t;
         using policystep_t = typename parent::policystep_t;
-        using get_distribution_t = std::function<std::multimap<int, action_t>(timestep_t)>;
-        using get_random_int_t = std::function<int(int, int)>;
+        using get_distribution_t = std::function<info_t(timestep_t)>;
 
     public:
         GreedyPolicy(get_distribution_t getDistribution)
