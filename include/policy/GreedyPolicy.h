@@ -2,6 +2,7 @@
 
 #include "policy/Policy.h"
 #include "trajectory/TimeStep.h"
+#include "util/RandomProvider.h"
 #include <map>
 #include <functional>
 
@@ -9,40 +10,73 @@ namespace CppAgents::Policy::GreedyPolicy
 {
     template <
         typename ActionType,
-        typename InfoType>
+        typename TimeStepType>
     class GreedyPolicy : Policy<
-                             Trajectory::TimeStepType<InfoType, int, int>,
+                             TimeStepType,
                              ActionType,
-                             std::map<std::pair<InfoType, ActionType>, int>,
-                             InfoType>
+                             std::multimap<int, ActionType>>
     {
     public:
-        using parent = Policy<Trajectory::TimeStepType<InfoType, int, int>,
+        using parent = Policy<TimeStepType,
                               ActionType,
-                              std::map<std::pair<InfoType, ActionType>, int>,
-                              InfoType>;
+                              std::multimap<int, ActionType>>;
 
         using timestep_t = typename parent::timestep_t;
         using action_t = typename parent::action_t;
-        using policystate_t = typename parent::policystate_t;
         using info_t = typename parent::info_t;
         using policystep_t = typename parent::policystep_t;
+        using get_distribution_t = std::function<std::multimap<int, action_t>(timestep_t)>;
+        using get_random_int_t = std::function<int(int, int)>;
 
     public:
-        GreedyPolicy() {}
-
-        policystate_t GetInitialState() override
+        GreedyPolicy(get_distribution_t getDistribution)
         {
-            return mState;
+            GetDistribution = getDistribution;
+            GetRandom = GetRandomInt;
         }
 
-        policystep_t Action(timestep_t ts, policystate_t ps) override
+        policystep_t Action(timestep_t ts) override
         {
-            const auto xd = mState.begin();
-            return {xd->first.second, mState, xd->first.first};
+            const auto &distribution = GetDistribution(ts);
+
+            assert(distribution.size() != 0);
+
+            if (distribution.size() > 1)
+            {
+                auto best = distribution.rbegin();
+                int numBest = 1;
+                for (auto i = ++distribution.rbegin(); i != distribution.rend(); i++)
+                {
+                    if (i->first == best->first)
+                    {
+                        numBest++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                auto random = GetRandom(0, numBest - 1);
+
+                for (random; random > 0; random--)
+                {
+                    best++;
+                }
+
+                return {best->second, distribution};
+            }
+
+            return {distribution.rbegin()->second, distribution};
         }
 
-    private:
-        std::map<std::pair<InfoType, ActionType>, int> mState;
+        void SetRandomProvider(get_random_int_t provider)
+        {
+            GetRandom = provider;
+        }
+
+    public:
+        get_distribution_t GetDistribution;
+        get_random_int_t GetRandom;
     };
 } // namespace CppAgents::Policy::GreedyPolicy
