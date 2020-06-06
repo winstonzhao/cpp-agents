@@ -7,6 +7,7 @@
 #include "policy/RandomPolicy.h"
 #include <map>
 #include <functional>
+#include <assert.h>
 
 namespace CppAgents::Policy
 {

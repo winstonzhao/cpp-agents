@@ -4,6 +4,7 @@
 #include "trajectory/TimeStep.h"
 #include "util/RandomProvider.h"
 #include <functional>
+#include <assert.h>
 
 namespace CppAgents::Policy
 {

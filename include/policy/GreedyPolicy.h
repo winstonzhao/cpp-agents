@@ -5,6 +5,7 @@
 #include "util/RandomProvider.h"
 #include <map>
 #include <functional>
+#include <assert.h>
 
 namespace CppAgents::Policy
 {
@@ -17,7 +18,7 @@ namespace CppAgents::Policy
     {
     public:
         using parent_t = Policy<TimeStepType,
-                              ActionType>;
+                                ActionType>;
 
         using timestep_t = typename parent_t::timestep_t;
         using action_t = typename parent_t::action_t;

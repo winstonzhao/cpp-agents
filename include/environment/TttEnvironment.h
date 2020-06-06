@@ -13,10 +13,10 @@ namespace CppAgents::Environment::TttEnvironment
     constexpr int BLANK = 0;
 
     template <int LENGTH>
-    class TttEnvironment : Environment<std::array<int, LENGTH * LENGTH + 1>, int, int> // last index is turn
+    class TttEnvironment : Environment<std::array<int, LENGTH * LENGTH + 1>, int, double> // last index is turn
     {
     public:
-        using parent_t = Environment<std::array<int, LENGTH * LENGTH + 1>, int, int>;
+        using parent_t = Environment<std::array<int, LENGTH * LENGTH + 1>, int, double>;
 
         using timestep_t = typename parent_t::timestep_t;
         using observation_t = typename parent_t::observation_t;
@@ -26,9 +26,9 @@ namespace CppAgents::Environment::TttEnvironment
         using discount_t = typename parent_t::discount_t;
         using seed_t = typename parent_t::seed_t;
 
-        static bool IsMax(timestep_t ts)
+        static bool IsMax(observation_t obs)
         {
-            return ts.observation[LENGTH * LENGTH + 1] == CROSS;
+            return obs[LENGTH * LENGTH] == CROSS;
         }
 
         static std::vector<action_t> GetActions(timestep_t ts)
@@ -99,7 +99,7 @@ namespace CppAgents::Environment::TttEnvironment
             auto goState = IsGameOver();
 
             // someone has won
-            if (goState)
+            if (goState != 0)
             {
                 auto oldBoard = mBoard;
                 Reset();
@@ -138,11 +138,16 @@ namespace CppAgents::Environment::TttEnvironment
         }
 
     private:
-        int IsGameOver()
+        double IsGameOver()
         {
             if (mNumPieces <= LENGTH * 2 - 1)
             {
                 return 0;
+            }
+
+            if (mNumPieces == LENGTH * LENGTH)
+            {
+                return 0.5;
             }
 
             for (int symbol : {CROSS, CIRCLE})
