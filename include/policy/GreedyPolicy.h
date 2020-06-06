@@ -28,10 +28,8 @@ namespace CppAgents::Policy::GreedyPolicy
         using get_distribution_t = std::function<info_t(timestep_t)>;
 
     public:
-        GreedyPolicy(get_distribution_t getDistribution)
+        GreedyPolicy(get_distribution_t getDistribution) : GetDistribution{getDistribution}, GetRandom{GetRandomInt}
         {
-            GetDistribution = getDistribution;
-            GetRandom = GetRandomInt;
         }
 
         policystep_t Action(timestep_t ts) override
@@ -74,7 +72,7 @@ namespace CppAgents::Policy::GreedyPolicy
             GetRandom = provider;
         }
 
-    public:
+    private:
         get_distribution_t GetDistribution;
         get_random_int_t GetRandom;
     };

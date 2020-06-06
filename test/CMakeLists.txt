@@ -7,6 +7,7 @@ set(test_src
   ttt_environment_tests.cc
   greedy_policy_tests.cc
   random_policy_tests.cc
+  epsilon_greedy_policy_tests.cc
 )
 
 add_executable(test_agents ${test_src})

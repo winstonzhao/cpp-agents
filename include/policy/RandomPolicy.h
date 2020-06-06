@@ -27,10 +27,8 @@ namespace CppAgents::Policy::RandomPolicy
         using get_actions_t = std::function<info_t(timestep_t)>;
 
     public:
-        RandomPolicy(get_actions_t getActions)
+        RandomPolicy(get_actions_t getActions) : GetActions{getActions}, GetRandom{GetRandomInt}
         {
-            GetActions = getActions;
-            GetRandom = GetRandomInt;
         }
 
         policystep_t Action(timestep_t ts) override
@@ -55,7 +53,7 @@ namespace CppAgents::Policy::RandomPolicy
             GetRandom = provider;
         }
 
-    public:
+    private:
         get_actions_t GetActions;
         get_random_int_t GetRandom;
     };

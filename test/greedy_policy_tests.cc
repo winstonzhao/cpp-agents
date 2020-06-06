@@ -14,7 +14,7 @@ namespace CppAgents::Policy::GreedyPolicy
             actions.insert({3, "best"});
             actions.insert({1, "worst"});
             actions.insert({2, "middle"});
-            actions.insert({2, "middle"});
+            actions.insert({2, "middle2"});
             return actions;
         }};
 
