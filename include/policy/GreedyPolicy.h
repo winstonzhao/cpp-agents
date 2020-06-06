@@ -6,7 +6,7 @@
 #include <map>
 #include <functional>
 
-namespace CppAgents::Policy::GreedyPolicy
+namespace CppAgents::Policy
 {
     template <
         typename ActionType,
@@ -14,12 +14,12 @@ namespace CppAgents::Policy::GreedyPolicy
     class GreedyPolicy : Policy<
                              TimeStepType,
                              ActionType,
-                             std::multimap<int, ActionType>>
+                             std::multimap<double, ActionType>>
     {
     public:
         using parent = Policy<TimeStepType,
                               ActionType,
-                              std::multimap<int, ActionType>>;
+                              std::multimap<double, ActionType>>;
 
         using timestep_t = typename parent::timestep_t;
         using action_t = typename parent::action_t;
@@ -76,4 +76,4 @@ namespace CppAgents::Policy::GreedyPolicy
         get_distribution_t GetDistribution;
         get_random_int_t GetRandom;
     };
-} // namespace CppAgents::Policy::GreedyPolicy
+} // namespace CppAgents::Policy

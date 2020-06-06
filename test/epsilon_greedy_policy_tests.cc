@@ -3,7 +3,7 @@
 #include "policy/EpsilonGreedyPolicy.h"
 #include "trajectory/TimeStep.h"
 
-namespace CppAgents::Policy::EpsilonGreedyPolicy
+namespace CppAgents::Policy
 {
 
     TEST(EPSILON_GREEDY_POLICY, PICKS_CORRECT_ACTION_NO_DECAY)
@@ -11,7 +11,7 @@ namespace CppAgents::Policy::EpsilonGreedyPolicy
         using ts_t = Trajectory::TimeStepType<int, int, int>;
         EpsilonGreedyPolicy<std::string, ts_t> policy{
             [](ts_t) {
-                std::multimap<int, std::string> actions;
+                std::multimap<double, std::string> actions;
                 actions.insert({3, "g_best"});
                 actions.insert({3, "g_best2"});
                 actions.insert({1, "g_worst"});
@@ -51,7 +51,7 @@ namespace CppAgents::Policy::EpsilonGreedyPolicy
         using ts_t = Trajectory::TimeStepType<int, int, int>;
         EpsilonGreedyPolicy<std::string, ts_t> policy{
             [](ts_t) {
-                std::multimap<int, std::string> actions;
+                std::multimap<double, std::string> actions;
                 actions.insert({3, "g_best"});
                 actions.insert({3, "g_best2"});
                 actions.insert({1, "g_worst"});
@@ -81,7 +81,7 @@ namespace CppAgents::Policy::EpsilonGreedyPolicy
         using ts_t = Trajectory::TimeStepType<int, int, int>;
         EpsilonGreedyPolicy<std::string, ts_t> policy{
             [](ts_t) {
-                std::multimap<int, std::string> actions;
+                std::multimap<double, std::string> actions;
                 actions.insert({3, "g_best"});
                 actions.insert({3, "g_best2"});
                 actions.insert({1, "g_worst"});
@@ -115,4 +115,4 @@ namespace CppAgents::Policy::EpsilonGreedyPolicy
         EXPECT_EQ(res.action, "r_2");
     }
 
-} // namespace CppAgents::Policy::EpsilonGreedyPolicy
+} // namespace CppAgents::Policy

@@ -1,12 +1,11 @@
 #pragma once
 
-#include "trajectory/Trajectory.h"
 #include <vector>
 
 namespace CppAgents::Agent
 {
     template <
-        typename TimeStepType,
+        typename TrainingDataType,
         typename ActionType,
         typename PolicyType,
         typename CollectPolicyType,
@@ -14,7 +13,7 @@ namespace CppAgents::Agent
     class Agent
     {
     public:
-        using timestep_t = TimeStepType;
+        using trainingdata_t = TrainingDataType;
         using action_t = ActionType;
         using policy_t = PolicyType;
         using collect_policy_t = CollectPolicyType;
@@ -22,6 +21,6 @@ namespace CppAgents::Agent
 
     public:
         // TODO: This should probably be a generic container
-        virtual LossInfoType Train(std::vector<Trajectory::Trajectory<TimeStepType, ActionType>> data);
+        virtual loss_info_t Train(trainingdata_t data);
     };
 } // namespace CppAgents::Agent

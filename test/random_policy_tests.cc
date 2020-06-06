@@ -3,7 +3,7 @@
 #include "policy/RandomPolicy.h"
 #include "trajectory/TimeStep.h"
 
-namespace CppAgents::Policy::RandomPolicy
+namespace CppAgents::Policy
 {
 
     TEST(RANDOM_POLICY, PICKS_CORRECT_ACTION)
@@ -27,4 +27,4 @@ namespace CppAgents::Policy::RandomPolicy
         EXPECT_EQ(res.action, "action2");
     }
 
-} // namespace CppAgents::Policy::RandomPolicy
+} // namespace CppAgents::Policy

@@ -8,6 +8,7 @@ set(test_src
   greedy_policy_tests.cc
   random_policy_tests.cc
   epsilon_greedy_policy_tests.cc
+  MMMC_agent_tests.cc
 )
 
 add_executable(test_agents ${test_src})

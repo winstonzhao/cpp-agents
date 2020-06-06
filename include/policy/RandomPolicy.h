@@ -5,7 +5,7 @@
 #include "util/RandomProvider.h"
 #include <functional>
 
-namespace CppAgents::Policy::RandomPolicy
+namespace CppAgents::Policy
 {
     template <
         typename ActionType,
@@ -57,4 +57,4 @@ namespace CppAgents::Policy::RandomPolicy
         get_actions_t GetActions;
         get_random_int_t GetRandom;
     };
-} // namespace CppAgents::Policy::RandomPolicy
+} // namespace CppAgents::Policy

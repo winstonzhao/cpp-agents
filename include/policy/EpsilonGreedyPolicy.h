@@ -8,7 +8,7 @@
 #include <map>
 #include <functional>
 
-namespace CppAgents::Policy::EpsilonGreedyPolicy
+namespace CppAgents::Policy
 {
     template <
         typename ActionType,
@@ -27,7 +27,7 @@ namespace CppAgents::Policy::EpsilonGreedyPolicy
         using action_t = typename parent::action_t;
         using info_t = typename parent::info_t;
         using policystep_t = typename parent::policystep_t;
-        using get_distribution_t = std::function<std::multimap<int, ActionType>(timestep_t)>;
+        using get_distribution_t = std::function<std::multimap<double, ActionType>(timestep_t)>;
         using get_actions_t = std::function<std::vector<ActionType>(timestep_t)>;
 
     public:
@@ -94,7 +94,7 @@ namespace CppAgents::Policy::EpsilonGreedyPolicy
         double mEpsilon;
         double mDecayRate;
         double mTerminalValue;
-        GreedyPolicy::GreedyPolicy<action_t, timestep_t> mGreedyPolicy;
-        RandomPolicy::RandomPolicy<action_t, timestep_t> mRandomPolicy;
+        GreedyPolicy<action_t, timestep_t> mGreedyPolicy;
+        RandomPolicy<action_t, timestep_t> mRandomPolicy;
     };
-} // namespace CppAgents::Policy::EpsilonGreedyPolicy
+} // namespace CppAgents::Policy

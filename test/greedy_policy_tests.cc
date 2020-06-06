@@ -3,14 +3,14 @@
 #include "policy/GreedyPolicy.h"
 #include "trajectory/TimeStep.h"
 
-namespace CppAgents::Policy::GreedyPolicy
+namespace CppAgents::Policy
 {
 
     TEST(GREEDY_POLICY, PICKS_HIGHEST_REWARD_SINGLE)
     {
         using ts_t = Trajectory::TimeStepType<int, int, int>;
         GreedyPolicy<std::string, ts_t> policy{[](ts_t) {
-            std::multimap<int, std::string> actions;
+            std::multimap<double, std::string> actions;
             actions.insert({3, "best"});
             actions.insert({1, "worst"});
             actions.insert({2, "middle"});
@@ -26,7 +26,7 @@ namespace CppAgents::Policy::GreedyPolicy
     {
         using ts_t = Trajectory::TimeStepType<int, int, int>;
         GreedyPolicy<std::string, ts_t> policy{[](ts_t ts) {
-            std::multimap<int, std::string> actions;
+            std::multimap<double, std::string> actions;
             actions.insert({1, "worst"});
             actions.insert({2, "middle"});
             actions.insert({3, "first"});
@@ -48,4 +48,4 @@ namespace CppAgents::Policy::GreedyPolicy
         EXPECT_EQ(res.action, "second");
     }
 
-} // namespace CppAgents::Policy::GreedyPolicy
+} // namespace CppAgents::Policy
