@@ -5,7 +5,7 @@ namespace CppAgents::Policy
     template <
         typename TimeStepType,
         typename ActionType,
-        typename InfoType>
+        typename InfoType = bool> // no info by default
     class Policy
     {
     public:
@@ -23,6 +23,6 @@ namespace CppAgents::Policy
         using policystep_t = PolicyStepType<ActionType, InfoType>;
 
     public:
-        virtual policystep_t Action(TimeStepType ts);
+        virtual policystep_t Action(TimeStepType ts) = 0;
     };
 } // namespace CppAgents::Policy

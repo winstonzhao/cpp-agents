@@ -13,25 +13,23 @@ namespace CppAgents::Policy
         typename TimeStepType>
     class GreedyPolicy : Policy<
                              TimeStepType,
-                             ActionType,
-                             std::multimap<double, ActionType>>
+                             ActionType>
     {
     public:
-        using parent = Policy<TimeStepType,
-                              ActionType,
-                              std::multimap<double, ActionType>>;
+        using parent_t = Policy<TimeStepType,
+                              ActionType>;
 
-        using timestep_t = typename parent::timestep_t;
-        using action_t = typename parent::action_t;
-        using info_t = typename parent::info_t;
-        using policystep_t = typename parent::policystep_t;
-        using get_distribution_t = std::function<info_t(timestep_t)>;
+        using timestep_t = typename parent_t::timestep_t;
+        using action_t = typename parent_t::action_t;
+        using policystep_t = typename parent_t::policystep_t;
+        using get_distribution_t = std::function<std::multimap<double, ActionType>(timestep_t)>;
 
     public:
         GreedyPolicy(get_distribution_t getDistribution) : GetDistribution{getDistribution}, GetRandom{GetRandomInt}
         {
         }
 
+        // TODO: can probably use more standard algos here
         policystep_t Action(timestep_t ts) override
         {
             const auto &distribution = GetDistribution(ts);
@@ -61,10 +59,10 @@ namespace CppAgents::Policy
                     best++;
                 }
 
-                return {best->second, distribution};
+                return {best->second};
             }
 
-            return {distribution.rbegin()->second, distribution};
+            return {distribution.rbegin()->second};
         }
 
         void SetRandomProvider(get_random_int_t provider)

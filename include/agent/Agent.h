@@ -21,6 +21,8 @@ namespace CppAgents::Agent
 
     public:
         // TODO: This should probably be a generic container
-        virtual loss_info_t Train(trainingdata_t data);
+        virtual loss_info_t Train(trainingdata_t data) = 0;
+        virtual collect_policy_t GetCollectPolicy() = 0;
+        virtual policy_t GetPolicy() = 0;
     };
 } // namespace CppAgents::Agent

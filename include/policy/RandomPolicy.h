@@ -12,19 +12,16 @@ namespace CppAgents::Policy
         typename TimeStepType>
     class RandomPolicy : Policy<
                              TimeStepType,
-                             ActionType,
-                             std::vector<ActionType>>
+                             ActionType>
     {
     public:
-        using parent = Policy<TimeStepType,
-                              ActionType,
-                              std::vector<ActionType>>;
+        using parent_t = Policy<TimeStepType,
+                                ActionType>;
 
-        using timestep_t = typename parent::timestep_t;
-        using action_t = typename parent::action_t;
-        using info_t = typename parent::info_t;
-        using policystep_t = typename parent::policystep_t;
-        using get_actions_t = std::function<info_t(timestep_t)>;
+        using timestep_t = typename parent_t::timestep_t;
+        using action_t = typename parent_t::action_t;
+        using policystep_t = typename parent_t::policystep_t;
+        using get_actions_t = std::function<std::vector<action_t>(timestep_t)>;
 
     public:
         RandomPolicy(get_actions_t getActions) : GetActions{getActions}, GetRandom{GetRandomInt}
@@ -45,7 +42,7 @@ namespace CppAgents::Policy
                 begin++;
             }
 
-            return {*begin, actions};
+            return {*begin};
         }
 
         void SetRandomProvider(get_random_int_t provider)

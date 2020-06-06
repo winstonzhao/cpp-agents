@@ -1,5 +1,5 @@
 cd build
-cmake ..
+cmake .. -DCMAKE_BUILD_TYPE=DEBUG -DAGENTS_BENCH=OFF -DBENCH_STATIC=OFF -DAGENTS_SANITIZE=ON
 if [ $? -ne 0 ]; then
     echo CMAKE FAILED
     exit

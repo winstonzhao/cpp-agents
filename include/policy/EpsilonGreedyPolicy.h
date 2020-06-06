@@ -16,17 +16,17 @@ namespace CppAgents::Policy
     class EpsilonGreedyPolicy : Policy<
                                     TimeStepType,
                                     ActionType,
-                                    bool>
+                                    double>
     {
     public:
-        using parent = Policy<TimeStepType,
-                              ActionType,
-                              bool>;
+        using parent_t = Policy<TimeStepType,
+                                ActionType,
+                                double>;
 
-        using timestep_t = typename parent::timestep_t;
-        using action_t = typename parent::action_t;
-        using info_t = typename parent::info_t;
-        using policystep_t = typename parent::policystep_t;
+        using timestep_t = typename parent_t::timestep_t;
+        using action_t = typename parent_t::action_t;
+        using info_t = typename parent_t::info_t;
+        using policystep_t = typename parent_t::policystep_t;
         using get_distribution_t = std::function<std::multimap<double, ActionType>(timestep_t)>;
         using get_actions_t = std::function<std::vector<ActionType>(timestep_t)>;
 
@@ -51,21 +51,9 @@ namespace CppAgents::Policy
 
         policystep_t Action(timestep_t ts) override
         {
-            const auto random = GetRandom(0, 1);
-            policystep_t ps;
-            if (random > mEpsilon)
-            {
-                const auto &res = mGreedyPolicy.Action(ts);
-                ps = {res.action, false};
-            }
-            else
-            {
-                const auto &res = mRandomPolicy.Action(ts);
-                ps = {res.action, true};
-            }
-
+            action_t action = (GetRandom(0, 1) > mEpsilon ? mGreedyPolicy.Action(ts) : mRandomPolicy.Action(ts)).action;
             DecayEpsilon();
-            return ps;
+            return {action, mEpsilon};
         }
 
         void SetFloatRandomProvider(get_random_float_t provider)

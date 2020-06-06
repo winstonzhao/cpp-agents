@@ -3,30 +3,46 @@
 #include <array>
 #include <vector>
 #include <iostream>
+#include <map>
 #include "environment/Environment.h"
 
 namespace CppAgents::Environment::TttEnvironment
 {
-    // Main reason why this is hardcoded, is due to array usage,
-    // I do wonder what the speed difference would be with std::vector,
-    // I guess I can test that when the whole gym is complete for TTT
     constexpr int CROSS = 1;
     constexpr int CIRCLE = -1;
     constexpr int BLANK = 0;
 
     template <int LENGTH>
-    class TttEnvironment : Environment<std::array<int, LENGTH * LENGTH>, int, int>
+    class TttEnvironment : Environment<std::array<int, LENGTH * LENGTH + 1>, int, int> // last index is turn
     {
     public:
-        using parent = Environment<std::array<int, LENGTH * LENGTH>, int, int>;
+        using parent_t = Environment<std::array<int, LENGTH * LENGTH + 1>, int, int>;
 
-        using timestep_t = typename parent::timestep_t;
-        using observation_t = typename parent::observation_t;
-        using action_t = typename parent::action_t;
-        using reward_t = typename parent::reward_t;
-        using state_t = typename parent::state_t;
-        using discount_t = typename parent::discount_t;
-        using seed_t = typename parent::seed_t;
+        using timestep_t = typename parent_t::timestep_t;
+        using observation_t = typename parent_t::observation_t;
+        using action_t = typename parent_t::action_t;
+        using reward_t = typename parent_t::reward_t;
+        using state_t = typename parent_t::state_t;
+        using discount_t = typename parent_t::discount_t;
+        using seed_t = typename parent_t::seed_t;
+
+        static bool IsMax(timestep_t ts)
+        {
+            return ts.observation[LENGTH * LENGTH + 1] == CROSS;
+        }
+
+        static std::vector<action_t> GetActions(timestep_t ts)
+        {
+            std::vector<action_t> moves;
+            for (int i = 0; i < LENGTH * LENGTH; i++)
+            {
+                if (ts.observation[i] == BLANK)
+                {
+                    moves.emplace_back(i);
+                }
+            }
+            return moves;
+        }
 
     public:
         TttEnvironment()
@@ -65,8 +81,8 @@ namespace CppAgents::Environment::TttEnvironment
         timestep_t Reset() override
         {
             std::fill(mBoard.begin(), mBoard.end(), BLANK);
-            mNumCircle = 0;
-            mNumCross = 0;
+            mBoard[LENGTH * LENGTH] = CROSS;
+            mNumPieces = 0;
             mLastTimeStep = {mBoard, 0, Trajectory::FIRST};
             return mLastTimeStep;
         }
@@ -75,19 +91,10 @@ namespace CppAgents::Environment::TttEnvironment
         {
             assert(mBoard[action] == BLANK);
 
-            // Cross goes first
-            int pieceToPlace;
-            if (mNumCircle == mNumCross)
-            {
-                mNumCross++;
-                pieceToPlace = CROSS;
-            }
-            else
-            {
-                mNumCircle++;
-                pieceToPlace = CIRCLE;
-            }
+            int pieceToPlace = mBoard[LENGTH * LENGTH];
             mBoard[action] = pieceToPlace;
+            mBoard[LENGTH * LENGTH] *= -1;
+            mNumPieces++;
 
             auto goState = IsGameOver();
 
@@ -116,18 +123,11 @@ namespace CppAgents::Environment::TttEnvironment
         void SetState(state_t state) override
         {
             mBoard = state;
-            mNumCircle = 0;
-            mNumCross = 0;
-
-            for (auto piece : mBoard)
+            for (int piece : state)
             {
-                if (piece == CROSS)
+                if (piece == CIRCLE || piece == CROSS)
                 {
-                    mNumCross++;
-                }
-                else if (piece == CIRCLE)
-                {
-                    mNumCircle++;
+                    mNumPieces++;
                 }
             }
 
@@ -140,7 +140,7 @@ namespace CppAgents::Environment::TttEnvironment
     private:
         int IsGameOver()
         {
-            if (mNumCircle < LENGTH && mNumCross < LENGTH)
+            if (mNumPieces <= LENGTH * 2 - 1)
             {
                 return 0;
             }
@@ -170,9 +170,8 @@ namespace CppAgents::Environment::TttEnvironment
 
     private:
         std::vector<std::vector<int>> mWinningGroups;
-        std::array<int, LENGTH * LENGTH> mBoard;
+        state_t mBoard;
         timestep_t mLastTimeStep;
-        int mNumCross = 0;
-        int mNumCircle = 0;
+        int mNumPieces;
     };
 } // namespace CppAgents::Environment::TttEnvironment
