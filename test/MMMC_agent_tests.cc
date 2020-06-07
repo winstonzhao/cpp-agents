@@ -40,42 +40,43 @@ namespace CppAgents::Agent
 
         std::vector<traj_t> data;
 
-        // state 0 -> action 1 -> (state 1, reward 0)
+        // state 0 -> action 1 -> (state 1, reward -2)
         data.push_back({{0, 0, Trajectory::FIRST}, 1, {1, -2, Trajectory::MID}});
         // state 1 -> action 1 -> (state 2, reward -1)
         data.push_back({{1, -2, Trajectory::MID}, 1, {2, 1, Trajectory::MID}});
-        // state 2 -> action 1 -> (state 3, reward 5)
+        // state 2 -> action 1 -> (state 3, reward 0)
         data.push_back({{2, 1, Trajectory::MID}, 1, {3, 0, Trajectory::LAST}});
         agent.Train(data);
 
         data.clear();
-        // state 0 -> action 2 -> (state 1, reward 0)
+        // state 0 -> action 2 -> (state 1, reward 1)
         data.push_back({{0, 0, Trajectory::FIRST}, 2, {1, 1, Trajectory::MID}});
-        // state 1 -> action 2 -> (state 2, reward 1)
+        // state 1 -> action 2 -> (state 2, reward -1)
         data.push_back({{1, 1, Trajectory::MID}, 2, {2, -1, Trajectory::MID}});
-        // state 2 -> action 2 -> (state 3, reward 0)
+        // state 2 -> action 2 -> (state 3, reward -1)
         data.push_back({{2, -1, Trajectory::MID}, 2, {3, -1, Trajectory::LAST}});
         agent.Train(data);
 
         auto policy = agent.GetPolicy();
         // qVal(state = 0, action = 1) = -1
-        // qVal(state = 0, action = 2) = 0
-        // we choose action 2
+        // qVal(state = 0, action = 2) = -1
+        // choose random
+        policy.SetRandomProvider([](int, int) { return 1; });
         auto res = policy.Action({0, 0, Trajectory::MID});
         EXPECT_EQ(res.action, 2);
+        policy.SetRandomProvider([](int, int) { return 0; });
+        res = policy.Action({0, 0, Trajectory::MID});
+        EXPECT_EQ(res.action, 1);
 
         // qVal(state = 1, action = 1) = 1
-        // qVal(state = 1, action = 2) = -1
+        // qVal(state = 1, action = 2) = -2
         // we choose action 1
         res = policy.Action({1, 0, Trajectory::MID});
         EXPECT_EQ(res.action, 1);
 
-        // qVal(state = 2, action = (1|2)) = 0
-        // both actions are equal so action is selected randomly
-        policy.SetRandomProvider([](int, int) { return 1; });
-        res = policy.Action({2, 0, Trajectory::MID});
-        EXPECT_EQ(res.action, 2);
-        policy.SetRandomProvider([](int, int) { return 0; });
+        // qVal(state = 1, action = 1) = 0
+        // qVal(state = 1, action = 2) = -1
+        // we choose action 1
         res = policy.Action({2, 0, Trajectory::MID});
         EXPECT_EQ(res.action, 1);
     }

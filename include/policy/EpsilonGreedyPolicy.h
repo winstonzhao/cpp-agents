@@ -28,7 +28,7 @@ namespace CppAgents::Policy
         using action_t = typename parent_t::action_t;
         using info_t = typename parent_t::info_t;
         using policystep_t = typename parent_t::policystep_t;
-        using get_distribution_t = std::function<std::multimap<double, ActionType>(timestep_t)>;
+        using get_distribution_t = std::function<std::vector<std::pair<double, ActionType>>(timestep_t)>;
         using get_actions_t = std::function<std::vector<ActionType>(timestep_t)>;
 
     public:
@@ -66,6 +66,11 @@ namespace CppAgents::Policy
         {
             mGreedyPolicy.SetRandomProvider(provider);
             mRandomPolicy.SetRandomProvider(provider);
+        }
+
+        void SetEpsilon(double epsilon)
+        {
+            mEpsilon = epsilon;
         }
 
     private:

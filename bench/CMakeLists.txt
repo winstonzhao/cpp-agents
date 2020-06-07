@@ -4,12 +4,12 @@ add_subdirectory(benchmark)
 include_directories(benchmark/include)
 
 set(bench_cc
-  test_bench.cc
+  bench_mmmc_ttt_gym.cc
 )
 
-add_executable(bench_agents ${bench_cc})
+add_executable(bench_mmmc_ttt_gym ${bench_cc})
 
-target_link_libraries(bench_agents
+target_link_libraries(bench_mmmc_ttt_gym
   benchmark
   ${AGENTS_LIB_NAME}
   ${CMAKE_THREAD_LIBS_INIT}

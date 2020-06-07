@@ -11,11 +11,11 @@ namespace CppAgents::Policy
         using ts_t = Trajectory::TimeStepType<int, int, int>;
         EpsilonGreedyPolicy<std::string, ts_t> policy{
             [](ts_t) {
-                std::multimap<double, std::string> actions;
-                actions.insert({3, "g_best"});
-                actions.insert({3, "g_best2"});
-                actions.insert({1, "g_worst"});
-                actions.insert({2, "g_middle"});
+                std::vector<std::pair<double, std::string>> actions;
+                actions.emplace_back(std::make_pair(3, "g_best"));
+                actions.emplace_back(std::make_pair(3, "g_best2"));
+                actions.emplace_back(std::make_pair(1, "g_worst"));
+                actions.emplace_back(std::make_pair(2, "g_middle"));
                 return actions;
             },
             [](ts_t) {
@@ -27,11 +27,11 @@ namespace CppAgents::Policy
         policy.SetFloatRandomProvider([](float, float) { return 0.11; });
         policy.SetIntRandomProvider([](int, int) { return 1; });
         auto res = policy.Action({5, 5, Trajectory::FIRST});
-        EXPECT_EQ(res.action, "g_best");
+        EXPECT_EQ(res.action, "g_best2");
 
         policy.SetIntRandomProvider([](int, int) { return 0; });
         res = policy.Action({5, 5, Trajectory::FIRST});
-        EXPECT_EQ(res.action, "g_best2");
+        EXPECT_EQ(res.action, "g_best");
 
         policy.SetFloatRandomProvider([](float, float) { return 0.09; });
         res = policy.Action({5, 5, Trajectory::FIRST});
@@ -51,11 +51,11 @@ namespace CppAgents::Policy
         using ts_t = Trajectory::TimeStepType<int, int, int>;
         EpsilonGreedyPolicy<std::string, ts_t> policy{
             [](ts_t) {
-                std::multimap<double, std::string> actions;
-                actions.insert({3, "g_best"});
-                actions.insert({3, "g_best2"});
-                actions.insert({1, "g_worst"});
-                actions.insert({2, "g_middle"});
+                std::vector<std::pair<double, std::string>> actions;
+                actions.emplace_back(std::make_pair(3, "g_best"));
+                actions.emplace_back(std::make_pair(3, "g_best2"));
+                actions.emplace_back(std::make_pair(1, "g_worst"));
+                actions.emplace_back(std::make_pair(2, "g_middle"));
                 return actions;
             },
             [](ts_t) {
@@ -73,7 +73,7 @@ namespace CppAgents::Policy
 
         // due to epsilon decay, greedy policy should be used
         res = policy.Action({5, 5, Trajectory::FIRST});
-        EXPECT_EQ(res.action, "g_best");
+        EXPECT_EQ(res.action, "g_best2");
     }
 
     TEST(EPSILON_GREEDY_POLICY, REACHES_TERMINAL_VALUE)
@@ -81,11 +81,11 @@ namespace CppAgents::Policy
         using ts_t = Trajectory::TimeStepType<int, int, int>;
         EpsilonGreedyPolicy<std::string, ts_t> policy{
             [](ts_t) {
-                std::multimap<double, std::string> actions;
-                actions.insert({3, "g_best"});
-                actions.insert({3, "g_best2"});
-                actions.insert({1, "g_worst"});
-                actions.insert({2, "g_middle"});
+                std::vector<std::pair<double, std::string>> actions;
+                actions.emplace_back(std::make_pair(3, "g_best"));
+                actions.emplace_back(std::make_pair(3, "g_best2"));
+                actions.emplace_back(std::make_pair(1, "g_worst"));
+                actions.emplace_back(std::make_pair(2, "g_middle"));
                 return actions;
             },
             [](ts_t) {
@@ -104,12 +104,12 @@ namespace CppAgents::Policy
 
         // due to epsilon decay, greedy policy should be used
         res = policy.Action({5, 5, Trajectory::FIRST});
-        EXPECT_EQ(res.action, "g_best");
+        EXPECT_EQ(res.action, "g_best2");
 
         // epsilon should be terminal at 0.04, if no terminal was set, epsilon would be at 0.025
         policy.SetFloatRandomProvider([](float, float) { return 0.041; }); // greedy is used
         res = policy.Action({5, 5, Trajectory::FIRST});
-        EXPECT_EQ(res.action, "g_best");
+        EXPECT_EQ(res.action, "g_best2");
         policy.SetFloatRandomProvider([](float, float) { return 0.03; }); // random is used
         res = policy.Action({5, 5, Trajectory::FIRST});
         EXPECT_EQ(res.action, "r_2");

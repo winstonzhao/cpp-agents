@@ -16,8 +16,8 @@ namespace CppAgents::Agent
 {
 
     template <typename TrajectoryType>
-    class MMMCAgent : Agent<
-                          std::vector<TrajectoryType>, // single episode of training
+    class MMSLAgent : Agent<
+                          TrajectoryType,
                           typename TrajectoryType::action_t,
                           Policy::GreedyPolicy<typename TrajectoryType::action_t, typename TrajectoryType::timestep_t>,
                           Policy::EpsilonGreedyPolicy<typename TrajectoryType::action_t, typename TrajectoryType::timestep_t>,
@@ -25,7 +25,7 @@ namespace CppAgents::Agent
     {
     public:
         using parent_t = Agent<
-            std::vector<TrajectoryType>, // single episode of training
+            TrajectoryType,
             typename TrajectoryType::action_t,
             Policy::GreedyPolicy<typename TrajectoryType::action_t, typename TrajectoryType::timestep_t>,
             Policy::EpsilonGreedyPolicy<typename TrajectoryType::action_t, typename TrajectoryType::timestep_t>,
@@ -45,7 +45,7 @@ namespace CppAgents::Agent
         using qvalsmap_t = std::unordered_map<std::pair<observation_t, action_t>, float, boost::hash<std::pair<observation_t, action_t>>>;
 
     public:
-        MMMCAgent(get_actions_t getActions,
+        MMSLAgent(get_actions_t getActions,
                   is_max_state_t isMaxState,
                   double alpha = 0.05,
                   double epsilon = 0.1,
@@ -64,29 +64,20 @@ namespace CppAgents::Agent
 
         loss_info_t Train(trainingdata_t data) override
         {
-            assert(data.size() != 0);
-
-            std::vector<reward_t> cumulativeRewards(data.size());
-            std::transform(
-                data.rbegin(), data.rend(), cumulativeRewards.rbegin(), [](const trajectory_t &next) { return next.after.reward; });
-            std::partial_sum(cumulativeRewards.rbegin(), cumulativeRewards.rend(), cumulativeRewards.rbegin(), std::plus<reward_t>());
-
-            auto rewardIt = cumulativeRewards.begin();
-            qvalsmap_t occurenceMap;
-            loss_info_t loss = 0;
-
-            for (const auto &traj : data)
+            auto delta = data.after.reward + 0.5 * (data.after.stepType == Trajectory::LAST ? 0 : GetOrCreateQValEntry(mQValues, {data.after.observation, mCollectPolicy.Action(data.after).action})->second) - GetOrCreateQValEntry(mQValues, {data.before.observation, data.action})->second;
+            GetOrCreateQValEntry(mEligibilities, {data.before.observation, data.action})->second++;
+            for (auto &eligPair : mEligibilities)
             {
-                auto occurences = GetOrCreateQValEntry(occurenceMap, {traj.before.observation, traj.action});
-                occurences->second++;
-                auto qVal = GetOrCreateQValEntry(mQValues, {traj.before.observation, traj.action});
-                loss_info_t iterationLoss = (*rewardIt) - qVal->second;
-                rewardIt++;
-                loss += iterationLoss;
-                qVal->second += (mAlpha / (occurences->second)) * iterationLoss;
+                GetOrCreateQValEntry(mQValues, eligPair.first)->second += mAlpha * delta * eligPair.second;
+                eligPair.second *= 0.5 * 0.5;
             }
 
-            return loss;
+            if (data.after.stepType == Trajectory::LAST)
+            {
+                mEligibilities.clear();
+            }
+
+            return delta;
         }
 
         collect_policy_t &GetCollectPolicy() override
@@ -143,6 +134,7 @@ namespace CppAgents::Agent
 
     private:
         qvalsmap_t mQValues;
+        qvalsmap_t mEligibilities;
         double mAlpha;
         double mEpsilon;
         double mEpsilonDecayRate;

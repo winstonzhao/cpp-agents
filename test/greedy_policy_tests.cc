@@ -10,11 +10,11 @@ namespace CppAgents::Policy
     {
         using ts_t = Trajectory::TimeStepType<int, int, int>;
         GreedyPolicy<std::string, ts_t> policy{[](ts_t) {
-            std::multimap<double, std::string> actions;
-            actions.insert({3, "best"});
-            actions.insert({1, "worst"});
-            actions.insert({2, "middle"});
-            actions.insert({2, "middle2"});
+            std::vector<std::pair<double, std::string>> actions;
+            actions.emplace_back(std::make_pair(3, "best"));
+            actions.emplace_back(std::make_pair(1, "worst"));
+            actions.emplace_back(std::make_pair(2, "middle"));
+            actions.emplace_back(std::make_pair(2, "middle2"));
             return actions;
         }};
 
@@ -26,22 +26,22 @@ namespace CppAgents::Policy
     {
         using ts_t = Trajectory::TimeStepType<int, int, int>;
         GreedyPolicy<std::string, ts_t> policy{[](ts_t ts) {
-            std::multimap<double, std::string> actions;
-            actions.insert({1, "worst"});
-            actions.insert({2, "middle"});
-            actions.insert({3, "first"});
-            actions.insert({3, "second"});
-            actions.insert({3, "third"});
+            std::vector<std::pair<double, std::string>> actions;
+            actions.emplace_back(std::make_pair(1, "worst"));
+            actions.emplace_back(std::make_pair(2, "middle"));
+            actions.emplace_back(std::make_pair(3, "first"));
+            actions.emplace_back(std::make_pair(3, "second"));
+            actions.emplace_back(std::make_pair(3, "third"));
             return actions;
         }};
 
         policy.SetRandomProvider([](int, int) { return 0; });
         auto res = policy.Action({5, 5, Trajectory::FIRST});
-        EXPECT_EQ(res.action, "third");
+        EXPECT_EQ(res.action, "first");
 
         policy.SetRandomProvider([](int, int) { return 2; });
         res = policy.Action({5, 5, Trajectory::FIRST});
-        EXPECT_EQ(res.action, "first");
+        EXPECT_EQ(res.action, "third");
 
         policy.SetRandomProvider([](int, int) { return 1; });
         res = policy.Action({5, 5, Trajectory::FIRST});

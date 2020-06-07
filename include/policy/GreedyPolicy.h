@@ -6,6 +6,8 @@
 #include <map>
 #include <functional>
 #include <assert.h>
+#include <algorithm>
+#include <numeric>
 
 namespace CppAgents::Policy
 {
@@ -23,47 +25,42 @@ namespace CppAgents::Policy
         using timestep_t = typename parent_t::timestep_t;
         using action_t = typename parent_t::action_t;
         using policystep_t = typename parent_t::policystep_t;
-        using get_distribution_t = std::function<std::multimap<double, ActionType>(timestep_t)>;
+        using get_distribution_t = std::function<std::vector<std::pair<double, ActionType>>(timestep_t)>;
+
+        static bool dist_compare(std::pair<double, ActionType> a, std::pair<double, ActionType> b)
+        {
+            return a.first < b.first;
+        }
 
     public:
         GreedyPolicy(get_distribution_t getDistribution) : GetDistribution{getDistribution}, GetRandom{GetRandomInt}
         {
         }
 
-        // TODO: can probably use more standard algos here
         policystep_t Action(timestep_t ts) override
         {
-            const auto &distribution = GetDistribution(ts);
+            const auto distribution = GetDistribution(ts);
 
             assert(distribution.size() != 0);
 
-            if (distribution.size() > 1)
+            const auto &max = std::max_element(distribution.begin(), distribution.end(), dist_compare);
+            std::vector<action_t> bestActions;
+            for (const auto &el : distribution)
             {
-                auto best = distribution.rbegin();
-                int numBest = 1;
-                for (auto i = ++distribution.rbegin(); i != distribution.rend(); i++)
+                if (el.first == max->first)
                 {
-                    if (i->first == best->first)
-                    {
-                        numBest++;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    bestActions.emplace_back(el.second);
                 }
-
-                auto random = GetRandom(0, numBest - 1);
-
-                for (random; random > 0; random--)
-                {
-                    best++;
-                }
-
-                return {best->second};
             }
 
-            return {distribution.rbegin()->second};
+            if (bestActions.size() == 1)
+            {
+                return {bestActions[0]};
+            }
+
+            auto random = GetRandom(0, bestActions.size() - 1);
+
+            return {bestActions[random]};
         }
 
         void SetRandomProvider(get_random_int_t provider)
@@ -74,5 +71,5 @@ namespace CppAgents::Policy
     private:
         get_distribution_t GetDistribution;
         get_random_int_t GetRandom;
-    };
+    }; // namespace CppAgents::Policy
 } // namespace CppAgents::Policy

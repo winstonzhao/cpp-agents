@@ -104,7 +104,7 @@ namespace CppAgents::Environment::TttEnvironment
     EXPECT_EQ(res.observation, blankBoard);
   }
 
-  TEST(TTT_ENVIRONMENT, GET_ACTIONS)
+  TEST(TTT_ENVRIONMENT, GET_ACTIONS)
   {
     std::array<int, ARRAY_SIZE> board{
         CROSS, CIRCLE, BLANK,
@@ -115,6 +115,20 @@ namespace CppAgents::Environment::TttEnvironment
     std::sort(res.begin(), res.end());
     std::vector<int> actions{2, 5, 6, 7, 8};
     EXPECT_EQ(res, actions);
+  }
+
+  TEST(TTT_ENVRIONMENT, OPTIMAL_ACTIONS)
+  {
+    auto actionMap = TttEnvironment<LENGTH>::GetStateToOptimalActionsMap();
+    std::array<int, ARRAY_SIZE> board{
+        BLANK, BLANK, BLANK,
+        BLANK, CROSS, BLANK,
+        BLANK, BLANK, BLANK,
+        CIRCLE};
+
+    const auto actions = actionMap.find(board)->second.second;
+    std::vector<int> optimalActions{0, 2, 6, 8};
+    EXPECT_EQ(actions, optimalActions);
   }
 
 } // namespace CppAgents::Environment::TttEnvironment
