@@ -14,6 +14,6 @@ static void BENCHMARK_TRAINING(benchmark::State &state)
 }
 
 BENCHMARK(BENCHMARK_TRAINING)
-    ->Args({100});
+    ->Args({10});
 
 BENCHMARK_MAIN();

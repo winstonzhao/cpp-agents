@@ -2,7 +2,7 @@
 #include <string>
 #include <algorithm>
 
-#include "gyms/mmmc_ttt_gym.h"
+#include "gyms/mmsl_ttt_gym.h"
 #include "agent/MMSLAgent.h"
 #include "environment/TttEnvironment.h"
 #include "trajectory/Trajectory.h"
@@ -53,10 +53,3 @@ namespace CppAgents::MmslTttGym
   }
 
 } // namespace CppAgents::MmslTttGym
-
-int main()
-{
-  using namespace CppAgents::MmslTttGym;
-  TrainAndTest(100, 10000000);
-  return 0;
-}

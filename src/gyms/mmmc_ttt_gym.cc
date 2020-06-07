@@ -10,7 +10,7 @@
 
 namespace CppAgents::MmmcTttGym
 {
-  constexpr int LENGTH = 4;
+  constexpr int LENGTH = 3;
   constexpr int ARRAY_SIZE = LENGTH * LENGTH + 1;
 
   using env_t = Environment::TttEnvironment::TttEnvironment<LENGTH>;
@@ -19,7 +19,7 @@ namespace CppAgents::MmmcTttGym
   using agent_t = Agent::MMMCAgent<traj_t>;
 
   static env_t env;
-  static agent_t agent{env_t::GetActions, env_t::IsMax, 0.5, 0.9};
+  static agent_t agent{env_t::GetActions, env_t::IsMax, 0.1, 0.4};
   static auto trainingPolicy = agent.GetCollectPolicy();
 
   std::vector<traj_t> data;
@@ -55,16 +55,8 @@ namespace CppAgents::MmmcTttGym
       Train(nTrain);
       const auto res = env_t::IsPolicyOptimal(agent.GetPolicy());
       const auto numVals = agent.GetQValues().size();
-      printf("Iteration: %d, Optimal Percentage: %f, States Seen: %ld, States Exist: %d\n", i, (double)res.second / res.first, numVals, res.first);
-      // trainingPolicy.SetEpsilon(((1 - (double)res.second / res.first)));
+      printf("Iteration: %d, Optimal Percentage: %f, States Seen: %ld\n", i, (double)res.second / res.first, numVals);
     }
   }
 
 } // namespace CppAgents::MmmcTttGym
-
-int main()
-{
-  using namespace CppAgents::MmmcTttGym;
-  TrainAndTest(1, 1);
-  return 0;
-}
