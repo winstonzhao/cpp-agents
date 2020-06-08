@@ -91,5 +91,3 @@ BENCHMARK(MMMC_TTT)
     ->Args({8, 5, 100000})
     ->Args({9, 5, 100000})
     ->Args({10, 5, 100000});
-
-BENCHMARK_MAIN();

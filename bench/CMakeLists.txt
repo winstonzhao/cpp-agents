@@ -5,11 +5,12 @@ include_directories(benchmark/include)
 
 set(bench_cc
   bench_ttt.cc
+  bench_main.cc
 )
 
-add_executable(bench_ttt ${bench_cc})
+add_executable(bench_main ${bench_cc})
 
-target_link_libraries(bench_ttt
+target_link_libraries(bench_main
   benchmark
   ${AGENTS_LIB_NAME}
   ${CMAKE_THREAD_LIBS_INIT}
