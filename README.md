@@ -12,8 +12,7 @@ TF Agents already exists and seems like a really easy and cool way to do RL: htt
 - [x] Greedy/Epsilon-greedy Policies
 - [x] Table Lookup MinMax Monte Carlo Agent w/ Gym
 - [x] Table Lookup MinMax Sarsa-Lambda Agent w/ Gym
-- [ ] Policy Saving
-- [ ] Aesthetic Graphs
+- [ ] Write Up w/ Aesthetic Graphs
 - [x] Benchmark/Optimize
 
 ## Make Interfaces for Major Components
