@@ -6,13 +6,16 @@ TF Agents already exists and seems like a really easy and cool way to do RL: htt
 
 # RoadMap
 
+## Future Work
+- [ ] Learn more about value function approximation, so I can create more complex models
+
 ## Simple Training Example (Tic-Tac-Toe)
 
 - [x] TTT-Environment
 - [x] Greedy/Epsilon-greedy Policies
 - [x] Table Lookup MinMax Monte Carlo Agent w/ Gym
 - [x] Table Lookup MinMax Sarsa-Lambda Agent w/ Gym
-- [ ] Write Up w/ Aesthetic Graphs
+- [X] Write Up w/ Aesthetic Graphs [Link](https://winstonzhao.github.io/2020/06/08/rl-ttt-mmmc-mmsl/)
 - [x] Benchmark/Optimize
 
 ## Make Interfaces for Major Components
