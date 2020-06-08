@@ -1,0 +1,22 @@
+{
+  "tests": {
+    "loc": "./build/test/test_agents"
+  },
+  "ttt_tests": {
+    "loc": "./build/test/test_agents",
+    "through_tests": true,
+    "flag": "TTT_ENVRIONMENT"
+  },
+  "mmmc": {
+    "through_bench": true,
+    "loc": "./build/bench/bench_ttt",
+    "flag": "MMMC_TTT",
+    "assert_release": true
+  },
+  "mmsl": {
+    "through_bench": true,
+    "loc": "./build/bench/bench_ttt",
+    "flag": "MMSL_TTT",
+    "assert_release": true
+  }
+}
