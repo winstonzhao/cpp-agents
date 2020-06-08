@@ -6,6 +6,16 @@ TF Agents already exists and seems like a really easy and cool way to do RL: htt
 
 # RoadMap
 
+## Simple Training Example (Tic-Tac-Toe)
+
+- [x] TTT-Environment
+- [x] Greedy/Epsilon-greedy Policies
+- [x] Table Lookup MinMax Monte Carlo Agent w/ Gym
+- [x] Table Lookup MinMax Sarsa-Lambda Agent w/ Gym
+- [ ] Policy Saving
+- [ ] Aesthetic Graphs
+- [x] Benchmark/Optimize
+
 ## Make Interfaces for Major Components
 
 - [x] Environment
@@ -13,12 +23,7 @@ TF Agents already exists and seems like a really easy and cool way to do RL: htt
 - [x] Policy
 - [x] Trajectory
 
-## Simple Training Example (Tic-Tac-Toe)
+## Backlog
 
-- [x] TTT-Environment
-- [x] Greedy/Epsilon-greedy Policies
-- [X] Table Lookup MinMax Monte Carlo Agent w/ Gym
-- [X] Table Lookup MinMax Sarsa-Lambda Agent w/ Gym
-- [ ] Policy Saving
-- [ ] Aesthetic Graphs
-- [ ] Benchmark/Optimize
+- [x] Abstract MinMax Agents
+- [x] Abstract Tic-Tac-Toe Gyms
