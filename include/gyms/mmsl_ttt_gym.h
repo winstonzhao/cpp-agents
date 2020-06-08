@@ -21,6 +21,13 @@ namespace CppAgents::MmslTttGym
         using collect_policy_t = typename agent_t::collect_policy_t;
         using policystep_t = typename collect_policy_t::policystep_t;
 
+        struct IterationData
+        {
+            int timesteps;
+            double optimality;
+            double loss;
+        };
+
     public:
         MmslTttGym(
             double alpha,
@@ -40,28 +47,31 @@ namespace CppAgents::MmslTttGym
             return (double)res.second / res.first;
         }
 
-        void Train(int timesteps)
+        double Train(int timesteps)
         {
             int steps = 0;
             ts_t next, prev;
             policystep_t res;
+            double loss = 0;
 
             while (steps < timesteps)
             {
                 prev = mEnv.GetCurrentTimeStep();
                 res = mCollectPolicy.Action(prev);
                 next = mEnv.Step(res.action);
-                mAgent.Train(traj_t{prev, res.action, next});
+                loss += mAgent.Train(traj_t{prev, res.action, next});
                 steps++;
                 mTimesteps++;
             };
+
+            return loss / timesteps;
         }
 
-        std::pair<int, double> TrainAndTest(int timesteps)
+        IterationData TrainAndTest(int timesteps)
         {
-            Train(timesteps);
+            const auto loss = Train(timesteps);
             const auto optimalPercentage = Test();
-            return {mTimesteps, optimalPercentage};
+            return {mTimesteps, optimalPercentage, loss};
         }
 
     private:

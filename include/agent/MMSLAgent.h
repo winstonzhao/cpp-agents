@@ -69,7 +69,8 @@ namespace CppAgents::Agent
         loss_info_t Train(trainingdata_t data) override
         {
             // who wrote this shit code?
-            auto delta = data.after.reward + mGamma * (data.after.stepType == Trajectory::LAST ? 0 : GetOrCreateQValEntry(mQValues, {data.after.observation, mCollectPolicy.Action(data.after).action})->second) - GetOrCreateQValEntry(mQValues, {data.before.observation, data.action})->second;
+            auto futureVal = (data.after.stepType == Trajectory::LAST ? 0 : GetOrCreateQValEntry(mQValues, {data.after.observation, mCollectPolicy.Action(data.after).action})->second);
+            auto delta = data.after.reward + mGamma * futureVal - GetOrCreateQValEntry(mQValues, {data.before.observation, data.action})->second;
             GetOrCreateQValEntry(mEligibilities, {data.before.observation, data.action})->second++;
             for (auto &eligPair : mEligibilities)
             {

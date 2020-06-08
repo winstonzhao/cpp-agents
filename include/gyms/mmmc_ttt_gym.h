@@ -14,12 +14,20 @@ namespace CppAgents::MmmcTttGym
     template <int LENGTH>
     class MmmcTttGym
     {
+    public:
         using env_t = Environment::TttEnvironment::TttEnvironment<LENGTH>;
         using ts_t = Trajectory::TimeStepType<typename env_t::observation_t, typename env_t::reward_t, int>;
         using traj_t = Trajectory::Trajectory<ts_t, int>;
         using agent_t = Agent::MMMCAgent<traj_t>;
         using collect_policy_t = typename agent_t::collect_policy_t;
         using policystep_t = typename collect_policy_t::policystep_t;
+
+        struct IterationData
+        {
+            int timesteps;
+            double optimality;
+            double loss;
+        };
 
     public:
         MmmcTttGym(double alpha, double epsilon) : mEnv{},
@@ -36,9 +44,10 @@ namespace CppAgents::MmmcTttGym
             return (double)res.second / res.first;
         }
 
-        void Train(int timesteps)
+        double Train(int timesteps)
         {
             int tsCount = 0;
+            double loss = 0;
 
             while (tsCount < timesteps)
             {
@@ -55,16 +64,18 @@ namespace CppAgents::MmmcTttGym
                     tsCount++;
                 }
 
-                auto loss = mAgent.Train(mData);
+                loss += mAgent.Train(mData);
                 mData.clear();
             };
+
+            return loss / timesteps;
         }
 
-        std::pair<int, double> TrainAndTest(int timesteps)
+        IterationData TrainAndTest(int timesteps)
         {
-            Train(timesteps);
+            const auto loss = Train(timesteps);
             const auto optimalPercentage = Test();
-            return {mTimesteps, optimalPercentage};
+            return {mTimesteps, optimalPercentage, loss};
         }
 
     private:

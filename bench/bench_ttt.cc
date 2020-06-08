@@ -12,7 +12,20 @@ static void MMMC_TTT(benchmark::State &state)
   while (state.KeepRunning())
   {
     const auto res = gym.TrainAndTest(state.range(2));
-    state.counters.insert({{"Timesteps", res.first}, {"Optimality", res.second}});
+    state.counters.insert({{"Timesteps", res.timesteps}, {"Optimality", res.optimality}});
+  }
+}
+
+static void MMMC_LOSS_TTT(benchmark::State &state)
+{
+  MmmcTttGym::MmmcTttGym<3> gym{0.1, 0.01};
+  while (state.KeepRunning())
+  {
+    for (int i = 0; i < state.range(0); i++)
+    {
+      const auto res = gym.TrainAndTest(state.range(1));
+      std::cout << res.timesteps << ":" << res.optimality << ":" << res.loss << std::endl;
+    }
   }
 }
 
@@ -26,9 +39,28 @@ static void MMSL_TTT(benchmark::State &state)
   while (state.KeepRunning())
   {
     const auto res = gym.TrainAndTest(state.range(4));
-    state.counters.insert({{"Timesteps", res.first}, {"Optimality", res.second}});
+    state.counters.insert({{"Timesteps", res.timesteps}, {"Optimality", res.optimality}});
   }
 }
+
+static void MMSL_LOSS_TTT(benchmark::State &state)
+{
+  MmslTttGym::MmslTttGym<3> gym{0.05, 0.4, 1, 0.5};
+  while (state.KeepRunning())
+  {
+    for (int i = 0; i < state.range(0); i++)
+    {
+      const auto res = gym.TrainAndTest(state.range(1));
+      std::cout << res.timesteps << ":" << res.optimality << ":" << res.loss << std::endl;
+    }
+  }
+}
+
+BENCHMARK(MMSL_LOSS_TTT)
+    ->Args({100, 10000000});
+
+BENCHMARK(MMMC_LOSS_TTT)
+    ->Args({100, 10000000});
 
 BENCHMARK(MMSL_TTT)
     ->Args({1, 8, 8, 5, 100000 << 0})

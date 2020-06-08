@@ -18,5 +18,17 @@
     "loc": "./build/bench/bench_main",
     "flag": "MMSL_TTT",
     "assert_release": true
+  },
+  "mmmc_loss": {
+    "through_bench": true,
+    "loc": "./build/bench/bench_main",
+    "flag": "MMMC_LOSS_TTT",
+    "assert_release": true
+  },
+  "mmsl_loss": {
+    "through_bench": true,
+    "loc": "./build/bench/bench_main",
+    "flag": "MMSL_LOSS_TTT",
+    "assert_release": true
   }
 }
