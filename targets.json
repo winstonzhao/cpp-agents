@@ -9,13 +9,13 @@
   },
   "mmmc": {
     "through_bench": true,
-    "loc": "./build/bench/bench_ttt",
+    "loc": "./build/bench/bench_main",
     "flag": "MMMC_TTT",
     "assert_release": true
   },
   "mmsl": {
     "through_bench": true,
-    "loc": "./build/bench/bench_ttt",
+    "loc": "./build/bench/bench_main",
     "flag": "MMSL_TTT",
     "assert_release": true
   }
