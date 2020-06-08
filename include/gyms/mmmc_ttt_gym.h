@@ -4,7 +4,6 @@
 #include <string>
 #include <algorithm>
 
-#include "gyms/mmmc_ttt_gym.h"
 #include "agent/MMMCAgent.h"
 #include "environment/TttEnvironment.h"
 #include "trajectory/Trajectory.h"
@@ -37,11 +36,11 @@ namespace CppAgents::MmmcTttGym
             return (double)res.second / res.first;
         }
 
-        void Train(int numEpisodes)
+        void Train(int timesteps)
         {
-            int episodes = 0;
+            int tsCount = 0;
 
-            while (episodes < numEpisodes)
+            while (tsCount < timesteps)
             {
                 ts_t next, prev;
                 next.stepType = Trajectory::FIRST;
@@ -53,19 +52,19 @@ namespace CppAgents::MmmcTttGym
                     next = mEnv.Step(res.action);
                     mData.emplace_back(traj_t{prev, res.action, next});
                     mTimesteps++;
+                    tsCount++;
                 }
 
                 auto loss = mAgent.Train(mData);
-                episodes++;
                 mData.clear();
             };
         }
 
-        std::pair<int, double> TrainAndTest(int nTrain)
+        std::pair<int, double> TrainAndTest(int timesteps)
         {
-            Train(nTrain);
+            Train(timesteps);
             const auto optimalPercentage = Test();
-            return { mTimesteps, optimalPercentage }
+            return {mTimesteps, optimalPercentage};
         }
 
     private:

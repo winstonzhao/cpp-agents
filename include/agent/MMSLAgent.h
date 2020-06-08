@@ -49,11 +49,15 @@ namespace CppAgents::Agent
                   is_max_state_t isMaxState,
                   double alpha = 0.05,
                   double epsilon = 0.1,
+                  double lambda = 0.5,
+                  double gamma = 0.5,
                   double epsilonDecayRate = 0,
                   double epsilonTerminalValue = 0) : GetActions{getActions},
                                                      IsMaxState{isMaxState},
                                                      mAlpha{alpha},
                                                      mEpsilon{epsilon},
+                                                     mLambda{lambda},
+                                                     mGamma{gamma},
                                                      mEpsilonDecayRate{mEpsilonDecayRate},
                                                      mEpsilonTerminal{epsilonTerminalValue},
                                                      mCollectPolicy{GetDistributionFunction(),
@@ -64,12 +68,13 @@ namespace CppAgents::Agent
 
         loss_info_t Train(trainingdata_t data) override
         {
-            auto delta = data.after.reward + 0.5 * (data.after.stepType == Trajectory::LAST ? 0 : GetOrCreateQValEntry(mQValues, {data.after.observation, mCollectPolicy.Action(data.after).action})->second) - GetOrCreateQValEntry(mQValues, {data.before.observation, data.action})->second;
+            // who wrote this shit code?
+            auto delta = data.after.reward + mGamma * (data.after.stepType == Trajectory::LAST ? 0 : GetOrCreateQValEntry(mQValues, {data.after.observation, mCollectPolicy.Action(data.after).action})->second) - GetOrCreateQValEntry(mQValues, {data.before.observation, data.action})->second;
             GetOrCreateQValEntry(mEligibilities, {data.before.observation, data.action})->second++;
             for (auto &eligPair : mEligibilities)
             {
                 GetOrCreateQValEntry(mQValues, eligPair.first)->second += mAlpha * delta * eligPair.second;
-                eligPair.second *= 0.5 * 0.5;
+                eligPair.second *= mGamma * mLambda;
             }
 
             if (data.after.stepType == Trajectory::LAST)
@@ -137,6 +142,8 @@ namespace CppAgents::Agent
         qvalsmap_t mEligibilities;
         double mAlpha;
         double mEpsilon;
+        double mLambda;
+        double mGamma;
         double mEpsilonDecayRate;
         double mEpsilonTerminal;
         collect_policy_t mCollectPolicy;

@@ -10,5 +10,5 @@ if [ $? -ne 0 ]; then
     echo MAKE FAILED
     exit
 fi
-./bench/bench_mmmc_ttt_gym
+./bench/bench_ttt
 cd ..

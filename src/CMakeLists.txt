@@ -1,6 +1,6 @@
 # Source files (except the main for the executable):
 set(agents_src
-  gyms/mmsl_ttt_gym.cc
+  test.cc
 )
 
 # Compile the library
