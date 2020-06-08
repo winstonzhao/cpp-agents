@@ -230,9 +230,6 @@ namespace CppAgents::Environment::TttEnvironment
 
             int totalStates = 0;
             int statesOptimal = 0;
-            observation_t bad;
-            std::vector<action_t> actions;
-            action_t picked;
             for (const auto &stateActionsPair : GetStateToOptimalActionsMap())
             {
                 totalStates++;
@@ -247,32 +244,6 @@ namespace CppAgents::Environment::TttEnvironment
 
                     statesOptimal++;
                 }
-                else
-                {
-                    bad = state;
-                    actions = optimalActions;
-                    picked = res.action;
-                }
-            }
-
-            if (statesOptimal == totalStates - 1)
-            {
-                std::cout << "----------------------------" << std::endl;
-                for (int i = 0; i < LENGTH; i++)
-                {
-                    for (int j = 0; j < LENGTH; j++)
-                    {
-                        std::cout << bad[i * LENGTH + j];
-                    }
-                    std::cout << std::endl;
-                }
-                std::cout << "Picked Action: " << picked << std::endl;
-                std::cout << "Good actions: ";
-                for (auto oa : actions)
-                {
-                    std::cout << oa << ", ";
-                }
-                std::cout << std::endl;
             }
 
             return {totalStates, statesOptimal};

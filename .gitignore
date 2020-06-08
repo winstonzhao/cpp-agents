@@ -32,3 +32,6 @@ build*
 
 # For OSX users:
 .DS_Store
+
+# My Stuff
+etc*

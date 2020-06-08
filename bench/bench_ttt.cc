@@ -18,7 +18,7 @@ static void MMMC_TTT(benchmark::State &state)
 
 static void MMMC_LOSS_TTT(benchmark::State &state)
 {
-  MmmcTttGym::MmmcTttGym<3> gym{0.1, 0.01};
+  MmmcTttGym::MmmcTttGym<3> gym{0.001, 0.001};
   while (state.KeepRunning())
   {
     for (int i = 0; i < state.range(0); i++)
@@ -45,7 +45,7 @@ static void MMSL_TTT(benchmark::State &state)
 
 static void MMSL_LOSS_TTT(benchmark::State &state)
 {
-  MmslTttGym::MmslTttGym<3> gym{0.05, 0.4, 1, 0.5};
+  MmslTttGym::MmslTttGym<3> gym{0.01, 0.4, 1, 0.2};
   while (state.KeepRunning())
   {
     for (int i = 0; i < state.range(0); i++)
